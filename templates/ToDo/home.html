@@ -1,14 +1,22 @@
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
     <title>Document</title>
 </head>
 <body>
+    
     {% if user.is_authenticated%}
         <a href="{% url 'Task:addtask' %}">Add task</a><br>
-        {% for task in tasks%} {{task}} <a href="/delete/{{task.id}}">Delete</a>  <br>
+        {% for task in tasks%} 
+            {% if task.completed == True%} <s>{{task}} </s>  {{task.deadline}} {{task.time}}  <a href="/delete/{{task.id}}">Delete</a> <a href="/completed/{{task.id}}">Mark Uncompleted</a> <br>
+            {%else%} {{task}} {{task.deadline}} {{task.time}} <a href="/delete/{{task.id}}">Delete</a> <a href="/completed/{{task.id}}">Mark Completed</a> <br>
+            {%endif%}
         {%endfor%}
     {%endif%}
+    
+    <!-- <script src="{% static 'home.js' %}"></script> -->
 </body>
 </html>
