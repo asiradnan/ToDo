@@ -5,6 +5,10 @@
     <title>Document</title>
 </head>
 <body>
-    Hello
+    {% if user.is_authenticated%}
+        <a href="{% url 'Task:addtask' %}">Add task</a><br>
+        {% for task in tasks%} {{task}} <a href="/delete/{{task.id}}">Delete</a>  <br>
+        {%endfor%}
+    {%endif%}
 </body>
 </html>

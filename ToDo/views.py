@@ -1,4 +1,3 @@
 from django.shortcuts import render
+from Task.models import Task
 
-def home(request):
-    return render(request,"ToDo/home.html")
