@@ -2,6 +2,48 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
 from .forms import TaskForm
 from .models import Task
+from allauth.account.models import EmailAddress
+
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordResetForm
+
+def profile(request):
+    if request.method == 'POST':
+        print("called")
+        if 'action_reset_password' in request.POST:
+            email = request.POST.get('email')
+            form = PasswordResetForm({'email': email})
+            if form.is_valid():
+                form.save(request=request)
+
+        elif 'action_send' in request.POST:
+            email = request.POST.get('email')
+            email_address = EmailAddress.objects.filter(email=email, user=request.user).first()
+            if email_address:
+                email_address.send_confirmation(request)
+
+        elif 'action_remove' in request.POST:
+            print("We are here")
+            email = request.POST.get('email')
+            email_address = EmailAddress.objects.filter(email=email, user=request.user).first()
+            print(email_address)
+            if email_address:
+                print(email_address.delete())
+        elif 'action_add' in request.POST:
+            new_email = request.POST.get('email')
+            if new_email:
+                email_address, created = EmailAddress.objects.get_or_create(user=request.user, email=new_email)
+                if created:
+                    email_address.send_confirmation(request)
+
+    context = {
+        'email_addresses': EmailAddress.objects.filter(user=request.user),
+    }
+    return render(request, 'task/profile.html', context)
+
+
+
 def home(request):
     if request.user.is_authenticated:
         tasks=Task.objects.filter(user=request.user)
@@ -9,6 +51,14 @@ def home(request):
         tasks=None
     return render(request,"ToDo/home.html",{"tasks":tasks})
 
+# def profile(request):
+#     try:
+#         email_address = EmailAddress.objects.get(user=request.user, primary=True)
+#         flag= email_address.verified
+#     except EmailAddress.DoesNotExist:
+#         flag = False
+#     return render(request,"task/profile.html",{"flag":flag})
+   
 def addTask(request):
     if request.method=="POST":
         form = TaskForm(request.POST)

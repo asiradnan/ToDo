@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+</head>
+<body>
+    <h2>Account Settings</h2>
+    
+    <!-- Password Reset Form -->
+    <h3>Password Reset</h3>
+    <form id="password-reset-form" action="{% url 'account_reset_password' %}" method="post">
+        {% csrf_token %}
+        <label for="id_email">Email:</label>
+        <input type="email" name="email" id="id_email" placeholder="Enter your email" required>
+        <button type="submit">Reset Password</button>
+    </form>
+    
+    <!-- Email Management Form -->
+    <h3>Email Management</h3>
+    <form action="{% url 'Task:profile' %}" method="post">
+        {% csrf_token %}
+        {% if user.emailaddress_set.exists %}
+            {% with emailaddress=user.emailaddress_set.first %}
+            <form action="{% url 'Task:profile' %}" method="post">
+                {% csrf_token %}
+                <label for="email">{{ emailaddress.email }}</label>
+                <p>
+                    {% if emailaddress.verified %}
+                        <span>Verified</span>
+                    {% else %}
+                        <span>Not Verified</span>
+                    {% endif %}
+                    {% if emailaddress.primary %}
+                        <span>Primary</span>
+                    {% endif %}
+                </p>
+                <input type="hidden" name="email" value="{{ emailaddress.email }}">
+                <button type="submit" name="action_send">Re-send Verification</button>
+                <button type="submit" name="action_remove">Remove</button>
+            </form>
+            {%endwith%}
+        {% else %}
+        <p>No email address found.</p>
+        <form action="{% url 'Task:profile' %}" method="post">
+            {% csrf_token %}
+            <label for="email">New Email:</label>
+            <input type="email" name="email" placeholder="Enter new email" required>
+            <button type="submit" name="action_add">Add Email</button>
+        </form>
+        {% endif %}
+        
+    </form>
+</body>
+</html>
