@@ -15,3 +15,6 @@ nav{
 #completedtasks{
     display: none;
 }
+li{
+    color: red;
+}
