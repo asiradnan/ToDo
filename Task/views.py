@@ -3,7 +3,10 @@ from django.http import HttpResponseRedirect
 from .forms import TaskForm
 from .models import Task
 def home(request):
-    tasks=Task.objects.all()
+    if request.user.is_authenticated:
+        tasks=Task.objects.filter(user=request.user)
+    else:
+        tasks=None
     return render(request,"ToDo/home.html",{"tasks":tasks})
 
 def addTask(request):

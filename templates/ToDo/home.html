@@ -7,10 +7,6 @@
     <title>To Do</title>
 </head>
 <body>
-    {% if user.is_authenticated%} <a href="{%url 'account_logout'%}">Logout</a>
-            {%else%}<a href="{%url 'account_login'%}">Login</a>
-                    <a href="{%url 'account_signup'%}">Signup</a>
-            {%endif%}
     <nav>
         <div id="navleft">
             <button>left</button>
@@ -21,21 +17,27 @@
             <button><a href="{% url 'Task:addtask' %}">Add task</a></button>
         </div>
         <div id="navright">
-            <button id="profile">right</button>
+            <div id="dropdown">
+                <button id="profile">Dropdown</button>
+                <div id="profile-content">
+                    {% if user.is_authenticated%} <a href="{%url 'account_logout'%}">Logout</a>
+                    {%else%}<a href="{%url 'account_login'%}">Login</a>
+                            <a href="{%url 'account_signup'%}">Signup</a>
+                    {%endif%}
+                </div>
+            </div>
         </div>
     </nav>
     <main id="main">
         <div id="tasks">
             {% if user.is_authenticated%}
-                {% for task in tasks%} 
-                    
+                {% for task in tasks%}  
                     {% if task.completed == False%} <a href="/update/{{task.id}}">{{task}}</a> {{task.deadline}} {{task.time}} <a href="/delete/{{task.id}}">Delete</a> <a href="/completed/{{task.id}}">Mark Completed</a> <br>
                     {%endif%}
                 {%endfor%}
             {%endif%}
         </div>
         <div id="completedtasks">
-            <h3>completed</h3>
             {% if user.is_authenticated%}
                 {% for task in tasks%} 
                     {% if task.completed == True%} <s>{{task}}</s>  {{task.deadline}} {{task.time}}  <a href="/delete/{{task.id}}">Delete</a> <a href="/completed/{{task.id}}">Mark Uncompleted</a> <br>

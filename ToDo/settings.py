@@ -130,3 +130,13 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_FORMS = {
     'signup': 'Task.forms.CustomSignupForm',
 }
+ACCOUNT_LOGOUT_ON_GET=True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "verifywithasir@gmail.com"
+EMAIL_HOST_PASSWORD = "sscy lpsa tnqk hzsq"
+UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
