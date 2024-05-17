@@ -18,4 +18,9 @@ class CustomSignupForm(SignupForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model=Task
+        name = forms.CharField(label="Task name", max_length=100)
         fields=["name","deadline","time"]
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'My Task'}),
+        }
+        
