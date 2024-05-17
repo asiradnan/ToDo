@@ -24,8 +24,17 @@ def delete(request,id):
     return HttpResponseRedirect("/")
 
 def completed(request,id):
-    id=int(id)
     task=get_object_or_404(Task, id=id)
     task.completed=not task.completed
     task.save()
     return HttpResponseRedirect("/")
+
+def update(request,id):
+    task=get_object_or_404(Task,id=id)
+    if request.method=="POST":
+        form=TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("/")
+    form=TaskForm(instance=task)
+    return render(request,"task/task.html",{"form":form})
