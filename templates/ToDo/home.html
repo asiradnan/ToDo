@@ -7,6 +7,10 @@
     <title>To Do</title>
 </head>
 <body>
+    {% if user.is_authenticated%}<li> <a href="{%url 'account_logout'%}">Logout</a></li>
+            {%else%}<li><a href="{%url 'account_login'%}">Login</a></li>
+                    <li><a href="{%url 'account_signup'%}">Signup</a></li>
+            {%endif%}
     <nav>
         <div id="navleft">
             <button>left</button>
