@@ -1,9 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from .forms import TaskForm
 from .models import Task
 from allauth.account.models import EmailAddress
 from django.contrib.auth.forms import PasswordResetForm
+from django.utils import timezone
+
 
 def profile(request):
     if request.method == 'POST':
@@ -45,7 +47,10 @@ def home(request):
         tasks=Task.objects.filter(user=request.user)
     else:
         tasks=None
-    return render(request,"ToDo/home.html",{"tasks":tasks})
+    current_timezone = timezone.get_current_timezone()
+    today_in_timezone = timezone.localtime(timezone.now(), current_timezone).date()
+ 
+    return render(request,"ToDo/home.html",{"tasks":tasks,"today":today_in_timezone})
 
    
 def addTask(request):
@@ -74,7 +79,7 @@ def completed(request,id):
 def update(request,id):
     task=get_object_or_404(Task,id=id)
     if request.method=="POST":
-        form=TaskForm(request.POST)
+        form=TaskForm(request.POST,instance=task)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/")

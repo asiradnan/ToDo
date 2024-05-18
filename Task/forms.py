@@ -1,5 +1,4 @@
 from django import forms
-from django.shortcuts import redirect
 from .models import Task
 from allauth.account.forms import SignupForm
 
@@ -18,9 +17,18 @@ class CustomSignupForm(SignupForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model=Task
-        name = forms.CharField(label="Task name", max_length=100)
         fields=["name","deadline","time"]
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'My Task'}),
+            'deadline': forms.TextInput(attrs={'id': 'id_deadline','autocomplete':'off'}),  
+            'time': forms.TextInput(attrs={'id': 'clockpicker','autocomplete':"off"}), 
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        time = cleaned_data.get('time')
+        deadline = cleaned_data.get('deadline')
+
+        if time and not deadline:
+            self.add_error('deadline', 'Date is required if time is provided.')
+
         

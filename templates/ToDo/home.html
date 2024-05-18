@@ -14,9 +14,9 @@
         </div>
         <div id="navmid">
             <div id="mainnav">
-                <button id="mytasks" onclick="mytasks()">My Tasks</button>
+                <button id="today" onclick="today()">Today</button>
+                <button id="all" onclick="allt()">All Tasks</button>
                 <button id="completed" onclick="completedtasks()">Completed</button>
-                <button><a href="{% url 'Task:addtask' %}">Add task</a></button>
             </div>
         </div>
         <div id="navright">
@@ -37,10 +37,41 @@
     <hr>
     <main id="main">
         <div id="tasks">
-            <header><h4>My Tasks</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}">Add task</a></button></span></header>
+            <header><h4>Today</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}">Add task</a></button></span></header>
             {% if user.is_authenticated%}
                 <table>
                 {% for task in tasks%}  
+                    {%load tz%}
+                    {% if task.completed == False and task.deadline%}
+                        {% if task.deadline == today %}
+                            <tr>
+                                <td id="tdmain">
+                                    <a href="/update/{{task.id}}">{{task}}</a><br>
+                                <span id="time">
+                                        {% if task.time %} Time: {{task.time|date:"H:i A"}}  &nbsp {%endif%}
+                                        {%if task.deadline%} Date: {{task.deadline}} {%endif%}
+                                </span> 
+                                </td> 
+                                <td id="act">
+                                    <a href="/completed/{{task.id}}"><button class="completebtn">Mark as Complete</button></a> 
+                                </td> 
+                                <!-- <td id="act">
+                                    <a href="/delete/{{task.id}}"><button id="deletebtn">Delete</button></a> 
+                                </td> -->
+                            </tr>
+                        {%else%} 
+                        {%endif%}
+                        
+                    {%endif%}
+                {%endfor%}
+                </table>
+            {%endif%}
+        </div>
+        <div id="alltasks">
+            <header><h4>All Tasks</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}">Add task</a></button></span></header>
+            {% if user.is_authenticated%}
+                <table>
+                    {% for task in tasks%}  
                     {% if task.completed == False%}
                      <tr>
                         <td id="tdmain">
@@ -76,9 +107,9 @@
                             <td id="act">
                                 <a href="/completed/{{task.id}}"><button class="completebtn">Mark as Incomplete</button></a> 
                             </td> 
-                            <td id="act">
+                            <!-- <td id="act">
                                 <a href="/delete/{{task.id}}"><button id="deletebtn">Delete</button></a> 
-                            </td>
+                            </td> -->
                         </tr>
                     {%endif%}
                 {%endfor%}
