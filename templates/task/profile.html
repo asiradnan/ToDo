@@ -3,12 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Settings</title>
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'task.png' %}"/>
+    <link rel="stylesheet" href="{% static 'account.css' %}">
+    <title>Account</title>
 </head>
 <body>
-    <h2>Account Settings</h2>
-    
-    <!-- Password Reset Form -->
+    <nav>
+        <div id="navleft">
+            <h3>To Do List</h3>
+        </div>
+        <div id="navmid">
+            <div id="mainnav">
+                <h3>Account Settings</h3>
+            </div>
+        </div>
+        <div id="navright">
+            <div id="dropdown">
+                <button id="profile">
+                    {% if user.is_authenticated%} <img src="{% static 'user.png'%}">
+                    {%else%} <img src="{% static 'guest.png'%}">
+                    {%endif%}
+                </button>
+                <div id="profile-content">
+                    {% if user.is_authenticated%} 
+                        <a href="/profile">Profile</a>
+                        <a href="{%url 'account_logout'%}">Logout</a>   
+                    {%else%}
+                        <a href="{%url 'account_login'%}">Login</a>
+                        <a href="{%url 'account_signup'%}">Signup</a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <hr>
     <h3>Password Reset</h3>
     <form id="password-reset-form" action="{% url 'account_reset_password' %}" method="post">
         {% csrf_token %}
@@ -17,7 +46,6 @@
         <button type="submit">Reset Password</button>
     </form>
     
-    <!-- Email Management Form -->
     <h3>Email Management</h3>
     <form action="{% url 'Task:profile' %}" method="post">
         {% csrf_token %}

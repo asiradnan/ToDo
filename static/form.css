@@ -15,8 +15,34 @@ input[type=text], input[type=text]:hover, input[type=text]:focus, input[type=tex
     /* height: 30px; */
     font-size: 25px;
   }
+input[type=submit]{
+    width: 100%;
+    background-color: #1bce74c3;
+    height: 40px;
+    border-radius: 5px;
+    font-family: "Manrope";
+    font-size: 25px;
+    margin-top: 10px;
+    border-color: cadetblue;
+}
 label{
     display: none;
+}
+#navleft h3{
+    margin: 0;
+    font-size: 30px;
+    margin-left: 35px;
+    color: #385350f3;
+}
+#profile img{
+    height: 35px;
+    width: 35px;
+    border-radius: 35px;
+}
+#profile{
+    margin-right: 10px;
+    border: none;
+    background: none;
 }
 #dropdown:hover #profile-content {
     display: block;
@@ -30,10 +56,12 @@ label{
 #profile-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background-color: #fbfbfb;
+    min-width: 100px;
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    right: 5px;
+    top:27px;
 }
 #dropdown {
     position: relative;
@@ -44,9 +72,6 @@ nav{
     grid-template-columns: 20% 60% 20%;
     height: 50px;
     align-items: center;
-}
-#mytasks{
-    font-weight: bold;
 }
 hr{
     height: 0.3px;
@@ -77,43 +102,13 @@ html, body{
     height: 100%;
     width: 100%;
     margin: 0;
-  }
+}
   
 #wrap{
     height: calc(50%);
     width: 100%;
     display: flex;
 }
-/* .ui-datepicker {
-    background: whitesmoke;
-    border: 1px solid #a22828;
-    border-radius: 10px;
-    font-family: "Manrope";
-}
-.ui-datepicker-header {
-    background: #4caf93ae;
-    color: red;
-    height: 25px;
-    border-radius: 5px;
-}
-.ui-datepicker-prev:hover,.ui-datepicker-next:hover  {
-    background-color: rgba(82, 152, 132, 0.915);
-}
-.ui-datepicker-calendar th{
-    padding: 5px;
-}
-.ui-datepicker-calendar td a{
-    border-radius: 5px 5px 5px 5px;
-   
-}
-.ui-datepicker-calendar td{
-    border-color: #00d1b2;
-} */
-/* form.css */
-body {
-    font-family: 'Manrope', sans-serif;
-}
-
 .ui-datepicker {
     background: #ffffff;
     border: 1px solid #dcdcdc;
