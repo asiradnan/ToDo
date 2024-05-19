@@ -6,12 +6,13 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'task.png' %}"/>
     <link href='https://fonts.googleapis.com/css?family=Manrope' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
     <title>To Do</title>
 </head>
 <body>
     <nav>
         <div id="navleft">
-            <h3>To Do List</h3>
+            <a href="{% url 'Task:home'%}"><h3>To Do List</h3></a>
         </div>
         <div id="navmid">
             <div id="mainnav">
@@ -46,27 +47,25 @@
             {% if user.is_authenticated%}
                 <table>
                 {% for task in tasks%}  
-                    {%load tz%}
                     {% if task.completed == False and task.deadline%}
                         {% if task.deadline == today %}
-                            <tr>
+                            <tr data-task-id="{{task.id}}">
                                 <td id="tdmain">
-                                    <a href="/update/{{task.id}}">{{task}}</a><br>
-                                <span id="time">
-                                        {% if task.time %} Time: {{task.time|date:"H:i A"}}  &nbsp {%endif%}
-                                        {%if task.deadline%} Date: {{task.deadline}} {%endif%}
-                                </span> 
+                                    <a href="/update/{{task.id}}?section=todaylist">{{task}}</a><br>
+                                    <span id="time">
+                                            {% if task.time %} Time: {{task.time|date:"H:i A"}}  &nbsp {%endif%}
+                                            {%if task.deadline%} Date: {{task.deadline}} {%endif%}
+                                    </span> 
                                 </td> 
                                 <td id="act">
-                                    <a href="/completed/{{task.id}}"><button class="completebtn">Mark as Complete</button></a> 
-                                </td> 
-                                <!-- <td id="act">
-                                    <a href="/delete/{{task.id}}"><button id="deletebtn">Delete</button></a> 
-                                </td> -->
+                                    <a href="{% url 'Task:complete' id=task.id %}?section=todaylist"><button class="completebtn">Mark as Complete</button></a>
+                                </td>
+                                <td id="act">
+                                    <a href="{% url 'Task:delete' id=task.id%}?section=todaylist"><button id="deletebtn">Delete</button></a>
+                                </td>
                             </tr>
                         {%else%} 
-                        {%endif%}
-                        
+                        {%endif%} 
                     {%endif%}
                 {%endfor%}
                 </table>
@@ -78,19 +77,19 @@
                 <table>
                     {% for task in tasks%}  
                     {% if task.completed == False%}
-                     <tr>
+                     <tr data-task-id="{{task.id}}">
                         <td id="tdmain">
-                            <a href="/update/{{task.id}}">{{task}}</a><br>
+                            <a href="/update/{{task.id}}?section=alllist">{{task}}</a><br>
                            <span id="time">
                                 {% if task.time %} Time: {{task.time}}  &nbsp {%endif%}
                                 {%if task.deadline%} Date: {{task.deadline}} {%endif%}
                         </span> 
                         </td> 
                         <td id="act">
-                            <a href="/completed/{{task.id}}"><button class="completebtn">Mark as Complete</button></a> 
-                        </td> 
+                            <a href="{% url 'Task:complete' id=task.id %}?section=alllist"><button class="completebtn">Mark as Complete</button></a>
+                        </td>
                         <td id="act">
-                            <a href="/delete/{{task.id}}"><button id="deletebtn">Delete</button></a> 
+                            <a href="{% url 'Task:delete' id=task.id%}?section=alllist"><button id="deletebtn">Delete</button></a>
                         </td>
                     </tr>
                     {%endif%}
@@ -104,17 +103,17 @@
                 <table>
                 {% for task in tasks%} 
                     {% if task.completed == True%}   
-                        <tr>
+                        <tr data-task-id="{{task.id}}">
                             <td id="tdmain">
                                 <s>{{task}}</s><br>
                                 <span id="time"> {{task.time}}, {{task.deadline}}</span> 
                             </td> 
                             <td id="act">
-                                <a href="/completed/{{task.id}}"><button class="completebtn">Mark as Incomplete</button></a> 
-                            </td> 
-                            <!-- <td id="act">
-                                <a href="/delete/{{task.id}}"><button id="deletebtn">Delete</button></a> 
-                            </td> -->
+                                <a href="{% url 'Task:complete' id=task.id %}?section=completedlist"><button class="completebtn">Mark as Incomplete</button></a>
+                            </td>
+                            <td id="act">
+                                <a href="{% url 'Task:delete' id=task.id%}?section=completedlist"><button id="deletebtn">Delete</button></a>
+                            </td>
                         </tr>
                     {%endif%}
                 {%endfor%}
@@ -123,7 +122,18 @@
         </div>
     </main>
     
-    
+    <script>
+        function showSection(section) {
+            if (section == 'todaylist') today();
+            else if (section=='alllist') allt();
+            else completedtasks();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const section = "{{ section }}";
+            showSection(section);
+        });
+    </script>
     <script src="{% static 'home.js' %}"></script>
 </body>
 </html>

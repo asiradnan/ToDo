@@ -6,12 +6,13 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'task.png' %}"/>
     <link href='https://fonts.googleapis.com/css?family=Manrope' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'auth.css'%}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
     <title>Sign In</title>
 </head>
 <body>
     <nav>
         <div id="navleft">
-            <h3>To Do List</h3>
+            <a href="{% url 'Task:home'%}"><h3>To Do List</h3></a>
         </div>
         <div id="navmid">
             <div id="mainnav">

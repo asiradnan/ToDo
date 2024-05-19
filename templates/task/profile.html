@@ -6,12 +6,13 @@
     {% load static %}
     <link rel="shortcut icon" type="image/png" href="{% static 'task.png' %}"/>
     <link rel="stylesheet" href="{% static 'account.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
     <title>Account</title>
 </head>
 <body>
     <nav>
         <div id="navleft">
-            <h3>To Do List</h3>
+            <a href="{% url 'Task:home'%}"><h3>To Do List</h3></a>
         </div>
         <div id="navmid">
             <div id="mainnav">
@@ -38,47 +39,82 @@
         </div>
     </nav>
     <hr>
-    <h3>Password Reset</h3>
-    <form id="password-reset-form" action="{% url 'account_reset_password' %}" method="post">
-        {% csrf_token %}
-        <label for="id_email">Email:</label>
-        <input type="email" name="email" id="id_email" placeholder="Enter your email" required>
-        <button type="submit">Reset Password</button>
-    </form>
-    
-    <h3>Email Management</h3>
-    <form action="{% url 'Task:profile' %}" method="post">
-        {% csrf_token %}
-        {% if user.emailaddress_set.exists %}
-            {% with emailaddress=user.emailaddress_set.first %}
+    <div class="container">
+        <div class="segment">
+            <h3>Change Password</h3>
+            <form method="post" name="password-change" action="{% url 'Task:profile' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_oldpassword">Current Password:</label>
+                    <input type="password" name="oldpassword" placeholder="Current Password" autocomplete="current-password" required id="id_oldpassword">
+                </div>
+                <div class="form-group">
+                    <label for="id_password1">New Password:</label>
+                    <input type="password" name="password1" placeholder="New Password" autocomplete="new-password" required id="id_password1">
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">New Password (again):</label>
+                    <input type="password" name="password2" placeholder="New Password (again)" required id="id_password2">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Change Password</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="segment">
+            <h3>Reset Password</h3>
+            <form id="password-reset-form" action="{% url 'account_reset_password' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_email">Email:</label>
+                    <input type="email" name="email" id="id_email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Reset Password</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="segment">
+            <h3>Email Management</h3>
             <form action="{% url 'Task:profile' %}" method="post">
                 {% csrf_token %}
-                <label for="email">{{ emailaddress.email }}</label>
-                <p>
-                    {% if emailaddress.verified %}
-                        <span>Verified</span>
-                    {% else %}
-                        <span>Not Verified</span>
-                    {% endif %}
-                    {% if emailaddress.primary %}
-                        <span>Primary</span>
-                    {% endif %}
-                </p>
-                <input type="hidden" name="email" value="{{ emailaddress.email }}">
-                <button type="submit" name="action_send">Re-send Verification</button>
-                <button type="submit" name="action_remove">Remove</button>
+                {% if user.emailaddress_set.exists %}
+                    {% with emailaddress=user.emailaddress_set.first %}
+                    <div class="form-group">
+                        <label for="email">{{ emailaddress.email }}</label>
+                        <div class="email-status">
+                            <p>
+                                {% if emailaddress.verified %}
+                                    <span class="verified">Verified</span>
+                                {% else %}
+                                    <span class="not-verified">Not Verified</span>
+                                {% endif %}
+                                {% if emailaddress.primary %}
+                                    <span class="primary">Primary</span>
+                                {% endif %}
+                            </p>
+                            <input type="hidden" name="email" value="{{ emailaddress.email }}">
+                            <div class="form-actions">
+                                <button type="submit" name="action_send">Re-send Verification</button>
+                                <button type="submit" name="action_remove">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% else %}
+                <p>No email address found.</p>
+                <div class="form-group">
+                    <label for="new-email">New Email:</label>
+                    <input type="email" name="email" placeholder="Enter new email" required id="new-email">
+                </div>
+                <div class="form-group">
+                    <button type="submit" name="action_add">Add Email</button>
+                </div>
+                {% endif %}
             </form>
-            {%endwith%}
-        {% else %}
-        <p>No email address found.</p>
-        <form action="{% url 'Task:profile' %}" method="post">
-            {% csrf_token %}
-            <label for="email">New Email:</label>
-            <input type="email" name="email" placeholder="Enter new email" required>
-            <button type="submit" name="action_add">Add Email</button>
-        </form>
-        {% endif %}
-        
-    </form>
+        </div>
+    </div>
 </body>
 </html>

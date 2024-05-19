@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/clockpicker/dist/jquery-clockpicker.min.css">
     <link rel="stylesheet" href="{% static 'form.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -17,7 +18,7 @@
 <body>
     <nav>
         <div id="navleft">
-            <h3>To Do List</h3>
+            <a href="{% url 'Task:home'%}"><h3>To Do List</h3></a>
         </div>
         <div id="navmid">
             <div id="mainnav">
@@ -44,42 +45,45 @@
         </div>
     </nav>
     <hr>
-    <div id="wrap">
-    <form id='form' method="post">
-        {%csrf_token%}
-        {{form.as_p}}
-        <input type="submit" value="Add Task">
-    </form>
-    </div>
-    <script>
-        $(function() {
-            $("#id_deadline").datepicker({
-                dateFormat: 'yy-mm-dd',
-                showAnim: 'fadeIn',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: '2001:2100',
-                nextText: 'Next Month',
-                prevText: 'Previous Month',
-                showOtherMonths: true,
-                selectOtherMonths: true,
+    {% if user.is_authenticated%}
+        <div id="wrap">
+        <form id='form' method="post" action="{% url 'Task:update' id=id %}?section={{ section }}">
+            {%csrf_token%}
+            {{form.as_p}}
+            <input type="submit" value="Add Task">
+        </form>
+        </div>
+        <script>
+            $(function() {
+                $("#id_deadline").datepicker({
+                    dateFormat: 'yy-mm-dd',
+                    showAnim: 'fadeIn',
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: '2001:2100',
+                    nextText: 'Next Month',
+                    prevText: 'Previous Month',
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                });
+            });
+            $(document).ready(function(){
+            $('#clockpicker').clockpicker({
+                donetext: 'Done',
+                default: 'now',
+                autoclose: false,  // Close the clockpicker when clicking outside
+                twelvehour: true, // Use 12-hour format (true) or 24-hour format (false)
+        
+            });
+            $('#form').submit(function() {
+                var timeInput = $('#clockpicker').val();
+                if (!timeInput) return;
+                var convertedTime = moment(timeInput, 'h:mm A').format('HH:mm');
+                $('#clockpicker').val(convertedTime);
             });
         });
-        $(document).ready(function(){
-        $('#clockpicker').clockpicker({
-            donetext: 'Done',
-            default: 'now',
-            autoclose: false,  // Close the clockpicker when clicking outside
-            twelvehour: true, // Use 12-hour format (true) or 24-hour format (false)
-    
-        });
-        $('#form').submit(function() {
-            var timeInput = $('#clockpicker').val();
-            if (!timeInput) return;
-            var convertedTime = moment(timeInput, 'h:mm A').format('HH:mm');
-            $('#clockpicker').val(convertedTime);
-        });
-    });
-    </script>
+        </script>
+    {%else%} <h2 style="text-align:center; color:red">Log In first</h2>
+    {%endif%}
 </body>
 </html>

@@ -1,15 +1,15 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render,redirect
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .forms import TaskForm
 from .models import Task
 from allauth.account.models import EmailAddress
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm,PasswordChangeForm
 from django.utils import timezone
-
+from django.contrib.auth import update_session_auth_hash
 
 def profile(request):
     if request.method == 'POST':
-        print("called")
         if 'action_reset_password' in request.POST:
             email = request.POST.get('email')
             form = PasswordResetForm({'email': email})
@@ -23,7 +23,6 @@ def profile(request):
                 email_address.send_confirmation(request)
 
         elif 'action_remove' in request.POST:
-            print("We are here")
             email = request.POST.get('email')
             email_address = EmailAddress.objects.filter(email=email, user=request.user).first()
             print(email_address)
@@ -35,6 +34,12 @@ def profile(request):
                 email_address, created = EmailAddress.objects.get_or_create(user=request.user, email=new_email)
                 if created:
                     email_address.send_confirmation(request)
+        elif 'password-change' in request.POST:
+            password_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+
 
     context = {
         'email_addresses': EmailAddress.objects.filter(user=request.user),
@@ -43,14 +48,14 @@ def profile(request):
 
 
 def home(request):
+    section = request.GET.get('section', 'todaylist')
     if request.user.is_authenticated:
         tasks=Task.objects.filter(user=request.user)
     else:
         tasks=None
     current_timezone = timezone.get_current_timezone()
     today_in_timezone = timezone.localtime(timezone.now(), current_timezone).date()
- 
-    return render(request,"ToDo/home.html",{"tasks":tasks,"today":today_in_timezone})
+    return render(request,"ToDo/home.html",{"tasks":tasks,"today":today_in_timezone,"section":section})
 
    
 def addTask(request):
@@ -65,23 +70,26 @@ def addTask(request):
         form = TaskForm()
     return render(request,"task/task.html",{"form":form})
 
-def delete(request,id):
-    task=Task.objects.filter(id=id)
+def delete(request, id):
+    section = request.GET.get('section', 'todaylist')
+    task=get_object_or_404(Task,id=id)
     task.delete()
-    return HttpResponseRedirect("/")
+    return redirect(f"{reverse('Task:home')}?section={section}")
 
-def completed(request,id):
-    task=get_object_or_404(Task, id=id)
+def complete_task(request, id):
+    section = request.GET.get('section', 'todaylist')
+    task=get_object_or_404(Task,id=id)
     task.completed=not task.completed
     task.save()
-    return HttpResponseRedirect("/")
+    return redirect(f"{reverse('Task:home')}?section={section}")
 
 def update(request,id):
+    section = request.GET.get('section', 'todaylist')  
     task=get_object_or_404(Task,id=id)
     if request.method=="POST":
         form=TaskForm(request.POST,instance=task)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect("/")
+            return redirect(f"{reverse('Task:home')}?section={section}")
     form=TaskForm(instance=task)
-    return render(request,"task/task.html",{"form":form})
+    return render(request, "task/task.html", {"form": form, "section": section,"id":id})
