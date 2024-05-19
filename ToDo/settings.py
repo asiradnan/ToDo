@@ -97,7 +97,9 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    'https://todobyasir.vercel.app'
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
