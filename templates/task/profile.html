@@ -42,26 +42,27 @@
     <div class="container">
         <div class="segment">
             <h3>Change Password</h3>
-            <form method="post" name="password-change" action="{% url 'Task:profile' %}">
+            <form method="post"  action="{% url 'Task:profile' %}">
                 {% csrf_token %}
+                <input type="hidden" name="csrfmiddlewaretoken" value="Zn95oH9UVK8i6XQXSCDUWNI88kLrB4dxjz2IFx06yPXebhMZl9JZZ7wdYELncikB">
                 <div class="form-group">
-                    <label for="id_oldpassword">Current Password:</label>
-                    <input type="password" name="oldpassword" placeholder="Current Password" autocomplete="current-password" required id="id_oldpassword">
+                    <label for="id_old_password">Old password:</label>
+                    <input type="password" name="old_password" autocomplete="current-password" autofocus required id="id_old_password">
                 </div>
                 <div class="form-group">
-                    <label for="id_password1">New Password:</label>
-                    <input type="password" name="password1" placeholder="New Password" autocomplete="new-password" required id="id_password1">
+                    <label for="id_new_password1">New password:</label>
+                    <input type="password" name="new_password1" autocomplete="new-password" required id="id_new_password1">   
                 </div>
                 <div class="form-group">
-                    <label for="id_password2">New Password (again):</label>
-                    <input type="password" name="password2" placeholder="New Password (again)" required id="id_password2">
+                    <label for="id_new_password2">New password confirmation:</label>
+                    <input type="password" name="new_password2" autocomplete="new-password" required id="id_new_password2">
                 </div>
                 <div class="form-group">
-                    <button type="submit">Change Password</button>
+                    <button type="submit" name="password_change">Reset Password</button>
                 </div>
             </form>
         </div>
-        
+
         <div class="segment">
             <h3>Reset Password</h3>
             <form id="password-reset-form" action="{% url 'account_reset_password' %}" method="post">

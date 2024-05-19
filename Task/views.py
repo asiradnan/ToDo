@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordResetForm,PasswordChangeForm
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
 
+
 def profile(request):
     if request.method == 'POST':
         if 'action_reset_password' in request.POST:
@@ -33,15 +34,20 @@ def profile(request):
                 email_address, created = EmailAddress.objects.get_or_create(user=request.user, email=new_email)
                 if created:
                     email_address.send_confirmation(request)
-        elif 'password-change' in request.POST:
+        elif 'password_change' in request.POST:
             password_form = PasswordChangeForm(user=request.user, data=request.POST)
             if password_form.is_valid():
                 user = password_form.save()
                 update_session_auth_hash(request, user)
-
+            else:
+                print(password_form.error_messages)
+                print(request.POST)
+        else:
+            print(request.POST)
 
     context = {
         'email_addresses': EmailAddress.objects.filter(user=request.user),
+        'form':PasswordChangeForm(user=request.user)
     }
     return render(request, 'task/profile.html', context)
 
