@@ -43,7 +43,7 @@
     <hr>
     <main id="main">
         <div id="tasks">
-            <header><h4>Today</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}">Add task</a></button></span></header>
+            <header><h4>Today</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}?section=todaylist">Add task</a></button></span></header>
             {% if user.is_authenticated%}
                 <table>
                 {% for task in tasks%}  
@@ -72,7 +72,7 @@
             {%endif%}
         </div>
         <div id="alltasks">
-            <header><h4>All Tasks</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}">Add task</a></button></span></header>
+            <header><h4>All Tasks</h4><span><button id="addbtn"><a href="{% url 'Task:addtask' %}?section=alllist">Add task</a></button></span></header>
             {% if user.is_authenticated%}
                 <table>
                     {% for task in tasks%}  
