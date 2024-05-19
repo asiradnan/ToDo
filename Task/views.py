@@ -6,8 +6,9 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth.forms import PasswordResetForm,PasswordChangeForm
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
+from django.views.decorators.csrf import csrf_protect
 
-
+@csrf_protect
 def profile(request):
     if request.method == 'POST':
         if 'action_reset_password' in request.POST:
