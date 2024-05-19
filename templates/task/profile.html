@@ -43,8 +43,7 @@
         <div class="segment">
             <h3>Change Password</h3>
             <form method="post"  action="{% url 'Task:profile' %}">
-                {% csrf_token %}
-                <input type="hidden" name="csrfmiddlewaretoken" value="Zn95oH9UVK8i6XQXSCDUWNI88kLrB4dxjz2IFx06yPXebhMZl9JZZ7wdYELncikB">
+                {%csrf_token%}
                 <div class="form-group">
                     <label for="id_old_password">Old password:</label>
                     <input type="password" name="old_password" autocomplete="current-password" autofocus required id="id_old_password">
