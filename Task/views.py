@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from .forms import TaskForm
 from .models import Task
 from allauth.account.models import EmailAddress
@@ -59,13 +58,14 @@ def home(request):
 
    
 def addTask(request):
+    section = request.GET.get('section', 'todaylist')  
     if request.method=="POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             x=form.save(commit=False)
             x.user=request.user
             x.save()
-            return HttpResponseRedirect("/")
+            return redirect(f"{reverse('Task:home')}?section={section}")
     else:
         form = TaskForm()
     return render(request,"task/task.html",{"form":form})

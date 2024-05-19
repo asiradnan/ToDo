@@ -47,7 +47,7 @@
     <hr>
     {% if user.is_authenticated%}
         <div id="wrap">
-        <form id='form' method="post" action="{% url 'Task:update' id=id %}?section={{ section }}">
+        <form id='form' method="post">
             {%csrf_token%}
             {{form.as_p}}
             <input type="submit" value="Add Task">
