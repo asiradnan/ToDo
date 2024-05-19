@@ -1,0 +1,40 @@
+form{
+    max-width: 400px;
+    margin: auto;
+    min-width: 300px;
+    height: 100%;
+    border: 1px solid slategray;
+    padding: 40px 10px 40px 10px;
+    border-radius: 5px;
+}
+#wrap{
+    margin-top: 5%;
+    width: 100%;
+    display: flex;
+}
+label{
+    font-size: 18px;
+}
+input[type='text'],input[type='password'],input[type='email'] {
+    width: 100%;
+    font-size: 17px;
+    margin: 5px 0 10px 0;
+    padding-left: 3px;
+}
+input[type='password']{
+    margin-bottom: 15px;
+}
+form a{
+    text-decoration: none;
+    color: chocolate;
+    font-size: 16px;
+}
+form button{
+    width: 50%;
+    font-family: "Manrope";
+    font-size: 19px;
+    border-radius: 10px;
+    margin-left: 25%;
+    background-color: #00d1b2;
+    border-width: 0.5px;
+}
