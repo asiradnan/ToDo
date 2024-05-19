@@ -6,6 +6,8 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth.forms import PasswordResetForm,PasswordChangeForm
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
 
 def profile(request):
     if request.method == 'POST':
@@ -36,9 +38,12 @@ def profile(request):
         elif 'password_change' in request.POST:
             password_form = PasswordChangeForm(user=request.user, data=request.POST)
             if password_form.is_valid():
-                print("changed")
                 user = password_form.save()
                 update_session_auth_hash(request, user)
+                messages.success(request, 'Your password is changed successfully.',extra_tags='password_change_success')
+            else:
+                messages.error(request, 'There was an error changing your password. Please try again.',extra_tags='password_change_fail')
+
 
     context = {
         'email_addresses': EmailAddress.objects.filter(user=request.user),
