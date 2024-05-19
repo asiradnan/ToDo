@@ -97,8 +97,13 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
 ]
+CSRF_COOKIE_SECURE = True  # or False in local
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
-    'https://todobyasir.vercel.app'
+    'https://todobyasir.vercel.app',
+    'https://www.todobyasir.vercel.app'
 ]
 
 # Internationalization
