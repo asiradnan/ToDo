@@ -97,7 +97,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
 ]
-CORS_ALLOWED_ORIGINS = [
+CSRF_TRUSTED_ORIGINS = [
     'https://todobyasir.vercel.app'
 ]
 
