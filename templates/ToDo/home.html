@@ -106,7 +106,10 @@
                         <tr data-task-id="{{task.id}}">
                             <td id="tdmain">
                                 <s>{{task}}</s><br>
-                                <span id="time"> {{task.time}}, {{task.deadline}}</span> 
+                                <span id="time">
+                                    {% if task.time %} Time: {{task.time|date:"H:i A"}}  &nbsp {%endif%}
+                                    {%if task.deadline%} Date: {{task.deadline}} {%endif%}
+                                </span> 
                             </td> 
                             <td id="act">
                                 <a href="{% url 'Task:complete' id=task.id %}?section=completedlist"><button class="completebtn">Mark as Incomplete</button></a>
