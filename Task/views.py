@@ -27,9 +27,8 @@ def profile(request):
         elif 'action_remove' in request.POST:
             email = request.POST.get('email')
             email_address = EmailAddress.objects.filter(email=email, user=request.user).first()
-            print(email_address)
             if email_address:
-                print(email_address.delete())
+                email_address.delete()
         elif 'action_add' in request.POST:
             new_email = request.POST.get('email')
             if new_email:
