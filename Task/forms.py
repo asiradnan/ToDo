@@ -20,8 +20,8 @@ class TaskForm(forms.ModelForm):
         fields=["name","deadline","time"]
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'My Task'}),
-            'deadline': forms.TextInput(attrs={'id': 'id_deadline','autocomplete':'off'}),  
-            'time': forms.TextInput(attrs={'id': 'clockpicker','autocomplete':"off"}), 
+            'deadline': forms.TextInput(attrs={'id': 'id_deadline','autocomplete':'off', 'placeholder': 'Date'}),  
+            'time': forms.TextInput(attrs={'id': 'clockpicker','autocomplete':"off",'placeholder':'Time'}), 
         }
     def clean(self):
         cleaned_data = super().clean()

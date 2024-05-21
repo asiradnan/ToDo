@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordResetForm,PasswordChangeForm
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def profile(request):
@@ -61,7 +62,7 @@ def home(request):
     today_in_timezone = timezone.localtime(timezone.now(), current_timezone).date()
     return render(request,"ToDo/home.html",{"tasks":tasks,"today":today_in_timezone,"section":section})
 
-   
+@login_required 
 def addTask(request):
     section = request.GET.get('section', 'todaylist')  
     if request.method=="POST":
